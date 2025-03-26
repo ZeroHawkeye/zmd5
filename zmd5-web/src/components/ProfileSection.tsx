@@ -1,6 +1,6 @@
 import { User, DecryptRecord, DecryptStatus } from '../types/index'
 import { FaUserSecret, FaLock, FaUnlock, FaSync, FaSpinner, FaCheck, FaTimesCircle, FaSearch, FaInfoCircle, FaHome, FaRandom, FaProjectDiagram, FaRedoAlt, FaStop, FaExclamationTriangle } from 'react-icons/fa'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { getTaskStatus, searchRainbowTable, finishTask } from '../api/rainbow'
 import { toast } from 'sonner'
 import '../styles/ProfileSection.css'
@@ -15,6 +15,75 @@ interface ProfileSectionProps {
   updateRecord: (updatedRecord: DecryptRecord) => void
   onReturnHome: () => void
 }
+
+// Popconfirm组件参数类型
+interface PopconfirmProps {
+  title: string;
+  message: string;
+  visible: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+// 自定义Popconfirm组件
+const Popconfirm = ({ title, message, visible, onConfirm, onCancel }: PopconfirmProps) => {
+  // 用于焦点管理
+  const confirmButtonRef = useRef<HTMLButtonElement>(null);
+  
+  // 当弹窗显示时，给确认按钮设置焦点并添加键盘监听
+  useEffect(() => {
+    if (visible) {
+      // 设置焦点
+      confirmButtonRef.current?.focus();
+      
+      // 键盘事件处理
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onCancel();
+        } else if (e.key === 'Enter') {
+          onConfirm();
+        }
+      };
+      
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [visible, onConfirm, onCancel]);
+  
+  if (!visible) return null;
+  
+  return (
+    <div className="popconfirm" onClick={onCancel}>
+      <div 
+        className="popconfirm-content" 
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="popconfirm-title"
+      >
+        <div className="popconfirm-header">
+          <FaExclamationTriangle className="warning-icon" />
+          <h3 id="popconfirm-title">{title}</h3>
+        </div>
+        <div className="popconfirm-body">
+          <p>{message}</p>
+        </div>
+        <div className="popconfirm-actions">
+          <button className="hacker-button cancel-button" onClick={onCancel}>
+            取消
+          </button>
+          <button 
+            className="hacker-button confirm-button" 
+            onClick={onConfirm}
+            ref={confirmButtonRef}
+          >
+            确认
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ProfileSection = ({
   currentUser,
@@ -49,35 +118,10 @@ const ProfileSection = ({
     reduction_attempts?: number
   } | null>(null)
   const [isLoadingTaskDetails, setIsLoadingTaskDetails] = useState(false)
-
-  // 添加确认对话框状态
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-  const [confirmTaskId, setConfirmTaskId] = useState<number | null>(null);
   
-  // 处理对话框的键盘事件
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!showConfirmDialog) return;
-      
-      if (e.key === 'Escape') {
-        cancelFinishTask();
-      } else if (e.key === 'Enter') {
-        confirmFinishTask();
-      }
-    };
-    
-    window.addEventListener('keydown', handleKeyDown);
-    
-    // 当对话框显示时禁用背景滚动
-    if (showConfirmDialog) {
-      document.body.style.overflow = 'hidden';
-    }
-    
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [showConfirmDialog, confirmTaskId]);
+  // 添加Popconfirm相关状态
+  const [popconfirmVisible, setPopconfirmVisible] = useState(false);
+  const [taskIdToFinish, setTaskIdToFinish] = useState<number | null>(null);
 
   // 新增：获取规约尝试次数的格式化文本
   const getReductionAttemptsText = (attempts?: number) => {
@@ -352,32 +396,34 @@ const ProfileSection = ({
     }
   }
 
-  // 添加结束任务功能
+  // 处理结束任务功能
   const handleFinishTask = async (taskId: number) => {
-    // 显示确认对话框而不是使用window.confirm
-    setConfirmTaskId(taskId);
-    setShowConfirmDialog(true);
+    // 显示确认对话框
+    setTaskIdToFinish(taskId);
+    setPopconfirmVisible(true);
   };
-
+  
   // 确认结束任务
   const confirmFinishTask = async () => {
-    if (confirmTaskId === null) return;
+    // 隐藏确认对话框
+    setPopconfirmVisible(false);
+    
+    if (taskIdToFinish === null) return;
     
     try {
       setIsLoadingTaskDetails(true);
-      setShowConfirmDialog(false);
       
       // 调用结束任务接口
-      const response = await finishTask(confirmTaskId);
+      const response = await finishTask(taskIdToFinish);
       
       if (response.success) {
         toast.success('任务已成功结束');
         
         // 刷新任务状态
-        await handleRefreshTaskStatus(confirmTaskId);
+        await handleRefreshTaskStatus(taskIdToFinish);
         
         // 更新对应的记录
-        const updatedRecord = decryptHistory.find(r => r.id === confirmTaskId || r.taskId === confirmTaskId);
+        const updatedRecord = decryptHistory.find(r => r.id === taskIdToFinish || r.taskId === taskIdToFinish);
         if (updatedRecord) {
           updateRecord({
             ...updatedRecord,
@@ -393,47 +439,26 @@ const ProfileSection = ({
       toast.error('网络错误，请稍后再试');
     } finally {
       setIsLoadingTaskDetails(false);
-      setConfirmTaskId(null);
+      setTaskIdToFinish(null);
     }
   };
-
+  
   // 取消结束任务
   const cancelFinishTask = () => {
-    setShowConfirmDialog(false);
-    setConfirmTaskId(null);
+    setPopconfirmVisible(false);
+    setTaskIdToFinish(null);
   };
 
   return (
     <div className="profile-section-container">
-      {/* 添加自定义确认对话框 */}
-      {showConfirmDialog && (
-        <div className="modal-overlay" onClick={cancelFinishTask}>
-          <div 
-            className="confirm-dialog" 
-            onClick={(e) => e.stopPropagation()}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="confirm-dialog-title"
-          >
-            <div className="confirm-header">
-              <FaExclamationTriangle className="warning-icon" />
-              <h3 id="confirm-dialog-title">结束任务确认</h3>
-            </div>
-            <div className="confirm-content">
-              <p>确定要结束此任务吗？</p>
-              <p className="confirm-warning">一旦结束，任务将无法继续进行，请谨慎操作。</p>
-            </div>
-            <div className="confirm-actions">
-              <button className="hacker-button cancel-button" onClick={cancelFinishTask}>
-                取消 (Esc)
-              </button>
-              <button className="hacker-button confirm-button" onClick={confirmFinishTask} autoFocus>
-                确认结束 (Enter)
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* 添加Popconfirm组件 */}
+      <Popconfirm
+        title="结束任务确认"
+        message="确定要结束此任务吗？一旦结束，任务将无法继续进行。"
+        visible={popconfirmVisible}
+        onConfirm={confirmFinishTask}
+        onCancel={cancelFinishTask}
+      />
       
       <div className="profile-section">
         <div className="profile-header">
