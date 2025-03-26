@@ -1,0 +1,6 @@
+{
+  "dependencies": {},
+  "devDependencies": {
+    "@shadcn/ui": "^0.0.4"
+  }
+}

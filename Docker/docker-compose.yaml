@@ -1,0 +1,13 @@
+services:
+  db:
+    image: bitnami/postgresql:17.2.0
+    restart: always
+    environment:
+      POSTGRESQL_PASSWORD: "012359Clown"
+      # 初始数据库
+      POSTGRESQL_USERNAME: "zero"
+      POSTGRESQL_DATABASE: "zmd5base"
+    ports:
+      - "5431:5432"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="100" fill="#1A1A1A"/>
+  <path d="M128 128L384 384" stroke="#00FF00" stroke-width="24" stroke-linecap="round"/>
+  <path d="M256 96V416" stroke="#00FF00" stroke-width="24" stroke-linecap="round"/>
+  <text x="256" y="256" font-family="Orbitron" font-size="120" fill="#00FF00" text-anchor="middle" dominant-baseline="middle">
+    ZMD5
+  </text>
+  <circle cx="256" cy="256" r="180" stroke="#00FF00" stroke-width="8" stroke-dasharray="16 8" fill="none"/>
+  <circle cx="256" cy="256" r="200" stroke="#00FF00" stroke-width="4" stroke-opacity="0.5" fill="none"/>
+</svg> 

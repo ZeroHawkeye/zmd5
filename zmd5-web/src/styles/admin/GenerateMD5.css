@@ -1,0 +1,401 @@
+/* 上传区域样式 */
+.upload-section {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 255, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+}
+
+.upload-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-title {
+  color: #00ff00;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  font-family: 'Courier New', monospace;
+}
+
+.upload-area {
+  border: 2px dashed rgba(0, 255, 0, 0.3);
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-area::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(0, 255, 0, 0.1),
+    transparent
+  );
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { left: -100%; }
+  20% { left: 100%; }
+  100% { left: 100%; }
+}
+
+.upload-area.dragging {
+  border-color: #00ff00;
+  background: rgba(0, 255, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+}
+
+.upload-area.has-file {
+  border-style: solid;
+  border-color: #00ff00;
+  background: rgba(0, 255, 0, 0.05);
+}
+
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.upload-content {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.upload-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+  color: #00ff00;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+}
+
+.upload-text {
+  color: #fff;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.upload-hint {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 255, 0, 0.1);
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  pointer-events: auto;
+}
+
+.file-name {
+  color: #00ff00;
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+}
+
+.remove-file {
+  background: none;
+  border: 1px solid #ff4444;
+  color: #ff4444;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  pointer-events: auto;
+}
+
+.remove-file:hover {
+  background: rgba(255, 68, 68, 0.1);
+}
+
+.upload-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-button:hover:not(:disabled) {
+  background: rgba(0, 255, 0, 0.2);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+}
+
+.upload-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upload-button.uploading {
+  background: rgba(0, 255, 0, 0.05);
+}
+
+/* 分隔线样式 */
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 45%;
+  height: 1px;
+  background: rgba(0, 255, 0, 0.3);
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.divider span {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 0 15px;
+  color: #00ff00;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* 文本输入区域样式 */
+.text-input-section {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 255, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+}
+
+.text-input-title {
+  color: #00ff00;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  font-family: 'Courier New', monospace;
+}
+
+.text-input-form {
+  position: relative;
+}
+
+.text-input-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.text-input {
+  width: 100%;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  border-radius: 4px;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 120px;
+  transition: all 0.3s ease;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #00ff00;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+}
+
+.text-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 按钮样式 */
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: rgba(0, 255, 0, 0.2);
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+}
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submit-button.loading {
+  background: rgba(0, 255, 0, 0.05);
+}
+
+/* 加载动画 */
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 255, 0, 0.3);
+  border-radius: 50%;
+  border-top-color: #00ff00;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 消息样式 */
+.error-message {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  color: #ff4444;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-family: 'Courier New', monospace;
+}
+
+.success-message {
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid rgba(0, 255, 0, 0.3);
+  color: #00ff00;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  font-family: 'Courier New', monospace;
+}
+
+.operation-stats {
+  margin-top: 5px;
+  font-size: 0.9rem;
+  color: rgba(0, 255, 0, 0.8);
+}
+
+/* 历史记录样式 */
+.history-section {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 255, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+}
+
+.history-title {
+  color: #00ff00;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  font-family: 'Courier New', monospace;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.history-item {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 255, 0, 0.1);
+  border-radius: 4px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+}
+
+.history-item:hover {
+  border-color: rgba(0, 255, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+}
+
+.history-content {
+  flex: 1;
+  margin-right: 15px;
+}
+
+.history-text {
+  color: #fff;
+  margin-bottom: 8px;
+  font-family: 'Courier New', monospace;
+}
+
+.history-text .label {
+  color: #00ff00;
+  margin-right: 8px;
+}
+
+.history-time {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.copy-button {
+  background: none;
+  border: 1px solid #00ff00;
+  color: #00ff00;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.copy-button:hover {
+  background: rgba(0, 255, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+} 

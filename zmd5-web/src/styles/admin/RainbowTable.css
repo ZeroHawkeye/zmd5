@@ -1,0 +1,430 @@
+/* 彩虹表管理页面样式 */
+.rainbow-table-container {
+  position: relative;
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.rainbow-table {
+  background-color: rgba(18, 18, 18, 0.95);
+  color: #e0e0e0;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(0, 255, 157, 0.2);
+  margin-bottom: 2rem;
+  max-width: 1200px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 255, 157, 0.1);
+}
+
+.rainbow-table h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #00ff9d;
+  text-shadow: 0 0 8px rgba(0, 255, 157, 0.4);
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.rainbow-table h2::before {
+  content: '>';
+  margin-right: 0.5rem;
+  font-family: monospace;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.rainbow-table h3 {
+  font-size: 1.4rem;
+  margin: 1.5rem 0 1rem;
+  color: #00ccff;
+  display: flex;
+  align-items: center;
+}
+
+.rainbow-table h3::before {
+  content: '#';
+  margin-right: 0.5rem;
+  color: #00ff9d;
+  font-family: monospace;
+}
+
+.total-count {
+  font-size: 0.9rem;
+  margin-left: 0.8rem;
+  color: #00ff9d;
+  background: rgba(0, 255, 157, 0.1);
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-weight: normal;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* 表单样式 */
+.add-entry-form {
+  background-color: rgba(26, 26, 26, 0.8);
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+  border-left: 3px solid #00ff9d;
+  box-shadow: 0 2px 10px rgba(0, 255, 157, 0.1);
+  animation: slideDown 0.3s ease-out;
+}
+
+.form-error {
+  background-color: rgba(255, 0, 0, 0.15);
+  color: #ff4d4d;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  border-left: 3px solid #ff4d4d;
+  font-size: 0.9rem;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+/* 添加行样式，用于水平排列表单元素 */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.form-group.half {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.form-group small {
+  display: block;
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.3rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #00ccff;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #00ccff;
+  box-shadow: 0 0 0 2px rgba(0, 204, 255, 0.25);
+}
+
+.form-group input::placeholder {
+  color: #888;
+}
+
+.add-entry-form button {
+  background-color: #00ff9d;
+  color: #121212;
+  border: none;
+  border-radius: 4px;
+  padding: 0.7rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 0.5rem;
+}
+
+.add-entry-form button:hover {
+  background-color: #00e08c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 255, 157, 0.3);
+}
+
+.add-entry-form button:disabled {
+  background-color: #2a2a2a;
+  color: #888;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 表单头部和展开/收起按钮样式 */
+.form-header {
+  background-color: rgba(26, 26, 26, 0.8);
+  padding: 1rem 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  border-left: 3px solid #00ff9d;
+  box-shadow: 0 2px 10px rgba(0, 255, 157, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.form-header:hover {
+  background-color: rgba(30, 30, 30, 0.9);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 255, 157, 0.15);
+}
+
+.form-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 !important;
+  cursor: pointer;
+  user-select: none;
+}
+
+.form-toggle::before {
+  content: '+';
+  color: #00ff9d;
+}
+
+.toggle-icon {
+  font-size: 0.8rem;
+  color: #00ff9d;
+  transition: transform 0.3s ease;
+}
+
+/* 条目表格样式 */
+.entries-list {
+  background-color: rgba(26, 26, 26, 0.8);
+  padding: 1.5rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  border-left: 3px solid #00ccff;
+  box-shadow: 0 2px 10px rgba(0, 204, 255, 0.1);
+}
+
+.entries-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.entries-table th {
+  background-color: rgba(37, 37, 37, 0.8);
+  padding: 0.8rem 1rem;
+  text-align: left;
+  color: #00ccff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.entries-table th:first-child {
+  border-top-left-radius: 4px;
+}
+
+.entries-table th:last-child {
+  border-top-right-radius: 4px;
+}
+
+.entries-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #333;
+}
+
+.entries-table tbody tr {
+  transition: all 0.2s;
+}
+
+.entries-table tbody tr:hover {
+  background-color: rgba(0, 204, 255, 0.05);
+  transform: translateY(-1px);
+  box-shadow: 0 1px 3px rgba(0, 204, 255, 0.1);
+}
+
+/* 哈希单元格样式 */
+.hash-cell {
+  font-family: 'Courier New', monospace;
+  color: #00ff9d;
+  text-shadow: 0 0 2px rgba(0, 255, 157, 0.3);
+  padding: 2px 4px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  letter-spacing: 1px;
+  font-size: 0.9em;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entries-table .no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #888;
+  font-style: italic;
+}
+
+.delete-btn {
+  background-color: rgba(255, 0, 0, 0.15);
+  color: #ff4d4d;
+  border: 1px solid #ff4d4d;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  background-color: rgba(255, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+/* 详情按钮样式 */
+.detail-btn {
+  background-color: rgba(0, 204, 255, 0.1);
+  color: #00ccff;
+  border: 1px solid #00ccff;
+  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-right: 0.5rem;
+}
+
+.detail-btn:hover {
+  background-color: rgba(0, 204, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+/* 详情行样式 */
+.details-row {
+  background-color: rgba(0, 204, 255, 0.05) !important;
+}
+
+.details-row td {
+  padding: 0;
+}
+
+.entry-details {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 0.3rem;
+}
+
+.detail-value {
+  font-family: 'Courier New', monospace;
+  color: #00ccff;
+}
+
+/* 加载更多按钮 */
+.load-more-btn {
+  background-color: #252525;
+  color: #00ccff;
+  border: 1px solid #00ccff;
+  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: block;
+  margin: 1rem auto 0;
+}
+
+.load-more-btn:hover {
+  background-color: rgba(0, 204, 255, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 204, 255, 0.2);
+}
+
+.loading-more {
+  text-align: center;
+  padding: 1rem;
+  color: #888;
+  font-style: italic;
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.rainbow-table {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 表单展开/收起动画 */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .rainbow-table-container {
+    padding: 1rem;
+  }
+  
+  .rainbow-table {
+    padding: 1rem;
+  }
+  
+  .add-entry-form, .entries-list {
+    padding: 1rem;
+  }
+  
+  .entries-table th, .entries-table td {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  
+  .rainbow-table h2 {
+    font-size: 1.5rem;
+  }
+  
+  .rainbow-table h3 {
+    font-size: 1.2rem;
+  }
+} 

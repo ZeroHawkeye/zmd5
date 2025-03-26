@@ -1,0 +1,66 @@
+/* MatrixHash组件样式 */
+.matrix-hash {
+  font-family: 'Courier New', monospace;
+  display: inline-block;
+  transition: all 0.3s ease;
+  padding: 2px 0;
+}
+
+.matrix-hash.hover {
+  background-color: rgba(0, 255, 157, 0.1);
+}
+
+.hash-char {
+  display: inline-block;
+  color: #00ff9d;
+  text-shadow: 0 0 2px rgba(0, 255, 157, 0.5);
+  transition: all 0.2s ease;
+}
+
+/* 鼠标悬停时的字符效果 */
+.matrix-hash.hover .hash-char {
+  animation: pulseChar 1.5s infinite alternate;
+}
+
+@keyframes pulseChar {
+  0% {
+    color: #00ff9d;
+    text-shadow: 0 0 2px rgba(0, 255, 157, 0.5);
+  }
+  100% {
+    color: #00ccff;
+    text-shadow: 0 0 4px rgba(0, 204, 255, 0.7);
+  }
+}
+
+/* 闪烁字符效果 */
+.hash-char.glitch {
+  animation: glitchEffect 0.3s infinite;
+}
+
+@keyframes glitchEffect {
+  0% {
+    color: #00ff9d;
+    text-shadow: 0 0 2px rgba(0, 255, 157, 0.5);
+  }
+  25% {
+    color: #ff00aa;
+    text-shadow: 0 0 4px rgba(255, 0, 170, 0.7);
+    transform: translateY(-1px);
+  }
+  50% {
+    color: #00ccff;
+    text-shadow: 0 0 3px rgba(0, 204, 255, 0.6);
+    transform: translateY(1px);
+  }
+  75% {
+    color: #ffcc00;
+    text-shadow: 0 0 4px rgba(255, 204, 0, 0.7);
+    transform: translateY(-1px);
+  }
+  100% {
+    color: #00ff9d;
+    text-shadow: 0 0 2px rgba(0, 255, 157, 0.5);
+    transform: translateY(0);
+  }
+} 

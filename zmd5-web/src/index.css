@@ -1,0 +1,256 @@
+:root {
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    font-weight: 500;
+    color: #646cff;
+    text-decoration: inherit;
+}
+a:hover {
+    color: #535bf2;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 3.2em;
+    line-height: 1.1;
+}
+
+button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    transition: border-color 0.25s;
+}
+button:hover {
+    border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        color: #213547;
+        background-color: #ffffff;
+    }
+    a:hover {
+        color: #747bff;
+    }
+    button {
+        background-color: #f9f9f9;
+    }
+}
+
+/* MD5生成组件样式 */
+.generate-md5 .form-success {
+  background-color: rgba(0, 255, 0, 0.1);
+  color: #00bb00;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.generate-md5 .operation-stats {
+  margin-top: 5px;
+  font-size: 0.9em;
+  display: inline-block;
+  background-color: #002211;
+  color: #00ff99;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border-left: 3px solid #00cc77;
+  font-family: 'Courier New', monospace;
+}
+
+.generate-md5 .form-error {
+  background-color: rgba(255, 0, 0, 0.1);
+  color: #ff5555;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+/* 加载中按钮样式 */
+.loading-button {
+  position: relative;
+  cursor: wait !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  min-width: 120px;
+  text-align: center;
+  background-color: #333333 !important;
+  padding-right: 30px !important; /* 为加载图标留出空间 */
+}
+
+.loading-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* 确保按钮不会错位 */
+.generate-md5 button[type="submit"] {
+  min-width: 120px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-top: 10px;
+}
+
+/* 生成表单布局 */
+.generate-md5 .generate-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.generate-md5 .form-group {
+  margin-bottom: 15px;
+}
+
+.generate-md5 .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.generate-md5 .form-group textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #333;
+  background-color: #1a1a1a;
+  color: #fff;
+  resize: vertical;
+}
+
+/* MD5生成组件样式 */
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0a0a0a;
+  z-index: 9999;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loading-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 255, 0, 0.03) 2px, transparent 2px),
+              linear-gradient(90deg, rgba(0, 255, 0, 0.03) 2px, transparent 2px);
+  background-size: 40px 40px;
+  animation: matrixBg 20s linear infinite;
+  z-index: -1;
+}
+
+.loading-container::after {
+  content: 'ZMD5';
+  position: absolute;
+  font-size: 8rem;
+  font-weight: bold;
+  color: rgba(0, 255, 0, 0.1);
+  z-index: -1;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 5px;
+  animation: pulseText 2s ease-in-out infinite;
+}
+
+@keyframes matrixBg {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-40px);
+  }
+}
+
+@keyframes pulseText {
+  0%, 100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+.loading-text {
+  color: #00ff00;
+  font-size: 1.2rem;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  position: relative;
+  padding-right: 20px;
+}
+
+.loading-text::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  background-color: #00ff00;
+  border-radius: 50%;
+  transform: translateY(-50%);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,16 @@
+version: '3'
+
+tasks:
+  linux:
+    desc: 编译Linux版本并恢复环境
+    cmds:
+      - go env -w GOOS=linux
+      - go env -w GOARCH=amd64
+      - go build -o zmd5-linux
+      - go env -w GOOS=windows
+  run:
+    desc: 运行程序
+    cmds:
+      - go run .
+    env:
+      APP_ENV: development
