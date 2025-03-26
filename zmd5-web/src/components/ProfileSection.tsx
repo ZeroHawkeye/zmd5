@@ -53,6 +53,31 @@ const ProfileSection = ({
   // 添加确认对话框状态
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [confirmTaskId, setConfirmTaskId] = useState<number | null>(null);
+  
+  // 处理对话框的键盘事件
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!showConfirmDialog) return;
+      
+      if (e.key === 'Escape') {
+        cancelFinishTask();
+      } else if (e.key === 'Enter') {
+        confirmFinishTask();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    
+    // 当对话框显示时禁用背景滚动
+    if (showConfirmDialog) {
+      document.body.style.overflow = 'hidden';
+    }
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [showConfirmDialog, confirmTaskId]);
 
   // 新增：获取规约尝试次数的格式化文本
   const getReductionAttemptsText = (attempts?: number) => {
@@ -382,11 +407,17 @@ const ProfileSection = ({
     <div className="profile-section-container">
       {/* 添加自定义确认对话框 */}
       {showConfirmDialog && (
-        <div className="modal-overlay">
-          <div className="confirm-dialog">
+        <div className="modal-overlay" onClick={cancelFinishTask}>
+          <div 
+            className="confirm-dialog" 
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="confirm-dialog-title"
+          >
             <div className="confirm-header">
               <FaExclamationTriangle className="warning-icon" />
-              <h3>结束任务确认</h3>
+              <h3 id="confirm-dialog-title">结束任务确认</h3>
             </div>
             <div className="confirm-content">
               <p>确定要结束此任务吗？</p>
@@ -394,10 +425,10 @@ const ProfileSection = ({
             </div>
             <div className="confirm-actions">
               <button className="hacker-button cancel-button" onClick={cancelFinishTask}>
-                取消
+                取消 (Esc)
               </button>
-              <button className="hacker-button confirm-button" onClick={confirmFinishTask}>
-                确认结束
+              <button className="hacker-button confirm-button" onClick={confirmFinishTask} autoFocus>
+                确认结束 (Enter)
               </button>
             </div>
           </div>

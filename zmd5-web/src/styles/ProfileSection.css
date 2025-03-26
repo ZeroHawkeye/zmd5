@@ -1423,4 +1423,189 @@
   100% {
     opacity: 0.6;
   }
+}
+
+/* 确认对话框样式 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10vh;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+  height: 100vh;
+  overflow: auto;
+}
+
+.confirm-dialog {
+  background-color: rgba(20, 25, 31, 0.95);
+  border: 1px solid var(--primary-dark);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.2), 
+              0 0 30px rgba(0, 255, 65, 0.1);
+  border-radius: 5px;
+  width: 400px;
+  max-width: 90%;
+  padding: 1.5rem;
+  color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+  animation: dialogEnter 0.4s ease;
+  margin-top: 0;
+  max-height: 80vh;
+}
+
+.confirm-dialog::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+                             rgba(255, 0, 0, 0.7),
+                             rgba(255, 100, 0, 0.7));
+  animation: progressScan 2s linear infinite;
+}
+
+.confirm-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+  padding-bottom: 0.8rem;
+}
+
+.warning-icon {
+  color: #ffc107;
+  font-size: 1.5rem;
+  margin-right: 0.8rem;
+  animation: warningPulse 2s infinite;
+}
+
+.confirm-header h3 {
+  margin: 0;
+  color: #ff5555;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+  text-shadow: 0 0 5px rgba(255, 85, 85, 0.5);
+}
+
+.confirm-content {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.confirm-content p {
+  margin: 0.5rem 0;
+}
+
+.confirm-warning {
+  color: #ffc107;
+  font-size: 0.9rem;
+  border-left: 3px solid rgba(255, 193, 7, 0.5);
+  padding-left: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cancel-button {
+  background-color: rgba(60, 67, 75, 0.5);
+  color: #ccc;
+  border: 1px solid #666;
+}
+
+.cancel-button:hover {
+  background-color: rgba(80, 87, 95, 0.8);
+  color: #fff;
+}
+
+.confirm-button {
+  background-color: rgba(201, 42, 42, 0.2);
+  color: #ff5555;
+  border: 1px solid rgba(255, 85, 85, 0.3);
+}
+
+.confirm-button:hover {
+  background-color: rgba(201, 42, 42, 0.4);
+  color: #ff7777;
+  box-shadow: 0 0 10px rgba(255, 85, 85, 0.3);
+}
+
+@keyframes dialogEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes warningPulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+}
+
+@keyframes progressScan {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+/* 确认对话框移动设备适配 */
+@media (max-width: 500px) {
+  .confirm-dialog {
+    width: 95%;
+    padding: 1.2rem;
+  }
+  
+  .confirm-header h3 {
+    font-size: 1rem;
+  }
+  
+  .warning-icon {
+    font-size: 1.2rem;
+  }
+  
+  .confirm-actions {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+  
+  .confirm-button, .cancel-button {
+    width: 100%;
+    padding: 0.8rem;
+    text-align: center;
+  }
+  
+  .confirm-content {
+    font-size: 0.9rem;
+  }
 } 
