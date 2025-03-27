@@ -182,6 +182,7 @@ func Decrypt(c *fiber.Ctx) error {
 			PlainText: md5Record.Plaintext,
 			UserID:    userID.(uint), // 直接使用 uint 类型
 			Hash:      inputHash,
+			Status:    2,
 			Type:      2, // 解密
 		}
 

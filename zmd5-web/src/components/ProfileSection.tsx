@@ -29,13 +29,13 @@ interface PopconfirmProps {
 const Popconfirm = ({ title, message, visible, onConfirm, onCancel }: PopconfirmProps) => {
   // 用于焦点管理
   const confirmButtonRef = useRef<HTMLButtonElement>(null);
-  
+
   // 当弹窗显示时，给确认按钮设置焦点并添加键盘监听
   useEffect(() => {
     if (visible) {
       // 设置焦点
       confirmButtonRef.current?.focus();
-      
+
       // 键盘事件处理
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
@@ -44,18 +44,18 @@ const Popconfirm = ({ title, message, visible, onConfirm, onCancel }: Popconfirm
           onConfirm();
         }
       };
-      
+
       window.addEventListener('keydown', handleKeyDown);
       return () => window.removeEventListener('keydown', handleKeyDown);
     }
   }, [visible, onConfirm, onCancel]);
-  
+
   if (!visible) return null;
-  
+
   return (
     <div className="popconfirm" onClick={onCancel}>
-      <div 
-        className="popconfirm-content" 
+      <div
+        className="popconfirm-content"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -72,8 +72,8 @@ const Popconfirm = ({ title, message, visible, onConfirm, onCancel }: Popconfirm
           <button className="hacker-button cancel-button" onClick={onCancel}>
             取消
           </button>
-          <button 
-            className="hacker-button confirm-button" 
+          <button
+            className="hacker-button confirm-button"
             onClick={onConfirm}
             ref={confirmButtonRef}
           >
@@ -118,7 +118,7 @@ const ProfileSection = ({
     reduction_attempts?: number
   } | null>(null)
   const [isLoadingTaskDetails, setIsLoadingTaskDetails] = useState(false)
-  
+
   // 添加Popconfirm相关状态
   const [popconfirmVisible, setPopconfirmVisible] = useState(false);
   const [taskIdToFinish, setTaskIdToFinish] = useState<number | null>(null);
@@ -402,26 +402,26 @@ const ProfileSection = ({
     setTaskIdToFinish(taskId);
     setPopconfirmVisible(true);
   };
-  
+
   // 确认结束任务
   const confirmFinishTask = async () => {
     // 隐藏确认对话框
     setPopconfirmVisible(false);
-    
+
     if (taskIdToFinish === null) return;
-    
+
     try {
       setIsLoadingTaskDetails(true);
-      
+
       // 调用结束任务接口
       const response = await finishTask(taskIdToFinish);
-      
+
       if (response.success) {
         toast.success('任务已成功结束');
-        
+
         // 刷新任务状态
         await handleRefreshTaskStatus(taskIdToFinish);
-        
+
         // 更新对应的记录
         const updatedRecord = decryptHistory.find(r => r.id === taskIdToFinish || r.taskId === taskIdToFinish);
         if (updatedRecord) {
@@ -442,7 +442,7 @@ const ProfileSection = ({
       setTaskIdToFinish(null);
     }
   };
-  
+
   // 取消结束任务
   const cancelFinishTask = () => {
     setPopconfirmVisible(false);
@@ -459,7 +459,7 @@ const ProfileSection = ({
         onConfirm={confirmFinishTask}
         onCancel={cancelFinishTask}
       />
-      
+
       <div className="profile-section">
         <div className="profile-header">
           <div className="profile-title-actions">
@@ -541,50 +541,53 @@ const ProfileSection = ({
                     key={record.id}
                     className={`history-item ${index === 0 ? 'latest-item' : ''}`}
                     style={{
-                      animationDelay: `${index * 0.05}s`
+                      animationDelay: `${index * 0.05}s`,
+                      transition: 'all 0.3s ease-in-out'
                     }}
                   >
                     <div className="history-header">
                       <div className="history-type">
                         {getOperationIcon(record)}
-                        <span>{getOperationType(record)}</span>
-                        {index === 0 && <span className="new-tag">新</span>}
+                        <span className="operation-type">{getOperationType(record)}</span>
+                        {index === 0 && <span className="new-tag pulse-animation">新</span>}
                       </div>
                       <div className="history-time">
-                        <span>{record.date}</span>
+                        <span className="time-text">{record.date}</span>
                       </div>
                     </div>
 
                     <div className="history-content">
                       <div className="history-main-data">
-                        <div className="history-hash">
-                          <span className="label">{record.hash.length === 32 ? '哈希值:' : '原文:'}</span>
+                        <div className="history-hash glass-effect">
+                          <span className="label bright-label">{record.hash.length === 32 ? '哈希值:' : '原文:'}</span>
                           <div className="value-container">
-                            <span className="value hash-value">{record.hash}</span>
+                            <span className="value hash-value glow-text">{record.hash}</span>
                             <button
-                              className="copy-button"
+                              className="copy-button hover-effect"
                               onClick={() => {
                                 navigator.clipboard.writeText(record.hash);
                                 toast.success('已复制到剪贴板');
                               }}
                               title="复制到剪贴板"
+                              aria-label="复制内容到剪贴板"
                             >
                               <FaCheck className="copy-icon" />
                             </button>
                           </div>
                         </div>
-                        <div className="history-result">
-                          <span className="label">{record.hash.length === 32 ? '结果:' : '哈希值:'}</span>
+                        <div className="history-result glass-effect">
+                          <span className="label bright-label">{record.hash.length === 32 ? '结果:' : '哈希值:'}</span>
                           <div className="value-container">
-                            <span className="value result-value">{record.result || '解密中...'}</span>
+                            <span className="value result-value glow-text">{record.result || '解密中...'}</span>
                             {record.result && (
                               <button
-                                className="copy-button"
+                                className="copy-button hover-effect"
                                 onClick={() => {
                                   navigator.clipboard.writeText(record.result || '');
                                   toast.success('已复制到剪贴板');
                                 }}
                                 title="复制到剪贴板"
+                                aria-label="复制结果到剪贴板"
                               >
                                 <FaCheck className="copy-icon" />
                               </button>
@@ -599,46 +602,53 @@ const ProfileSection = ({
                       {!record.hash && (
                         <div className="task-actions">
                           <button
-                            className={`hacker-button small-button ${expandedTaskId === (record.taskId || record.id) ? 'active' : ''}`}
+                            className={`hacker-button small-button hover-glow ${expandedTaskId === (record.taskId || record.id) ? 'active' : ''}`}
                             onClick={() => handleCheckTaskStatus(record.taskId || record.id)}
+                            aria-expanded={expandedTaskId === (record.taskId || record.id)}
+                            aria-controls={`task-details-${record.taskId || record.id}`}
                           >
                             {expandedTaskId === (record.taskId || record.id) ? (
-                              <><FaInfoCircle /> 隐藏详情</>
+                              <><FaInfoCircle className="button-icon" /> <span className="button-text">隐藏详情</span></>
                             ) : (
-                              <><FaInfoCircle /> 任务详情</>
+                              <><FaInfoCircle className="button-icon" /> <span className="button-text">任务详情</span></>
                             )}
                           </button>
 
                           {/* 展开的任务详情 */}
                           {expandedTaskId === (record.taskId || record.id) && (
-                            <div className="task-details">
+                            <div
+                              className="task-details fade-in"
+                              id={`task-details-${record.taskId || record.id}`}
+                            >
                               {isLoadingTaskDetails ? (
                                 <div className="loading-details">
-                                  <FaSpinner className="spinning" /> 加载详情中...
+                                  <FaSpinner className="spinning" /> <span className="loading-text">加载详情中...</span>
                                 </div>
                               ) : (
                                 taskDetails && (
-                                  <div className="task-details-content">
+                                  <div className="task-details-content scale-in">
                                     <div className="details-header">
-                                      <h4>任务详情</h4>
+                                      <h4 className="details-title">任务详情</h4>
                                       <div className="details-buttons">
                                         <button
-                                          className="refresh-button"
+                                          className="refresh-button hover-effect"
                                           onClick={(e) => {
                                             e.preventDefault();
                                             e.stopPropagation();
                                             handleRefreshTaskStatus(record.taskId || record.id);
                                           }}
                                           title="刷新任务状态"
+                                          disabled={isLoadingTaskDetails}
+                                          aria-label="刷新任务状态"
                                         >
                                           <FaRedoAlt className={isLoadingTaskDetails ? "spinning" : ""} />
-                                          <span>{isLoadingTaskDetails ? "刷新中" : "刷新"}</span>
+                                          <span className="button-text">{isLoadingTaskDetails ? "刷新中" : "刷新"}</span>
                                         </button>
-                                        
+
                                         {/* 添加结束任务按钮，仅显示在进行中的任务 */}
                                         {taskDetails.status === 'in_progress' && (
                                           <button
-                                            className="stop-button"
+                                            className="stop-button hover-effect"
                                             onClick={(e) => {
                                               e.preventDefault();
                                               e.stopPropagation();
@@ -646,20 +656,21 @@ const ProfileSection = ({
                                             }}
                                             title="结束任务"
                                             disabled={isLoadingTaskDetails}
+                                            aria-label="结束当前任务"
                                           >
                                             <FaStop className="stop-icon" />
-                                            <span>结束任务</span>
+                                            <span className="button-text">结束任务</span>
                                           </button>
                                         )}
                                       </div>
                                     </div>
 
                                     <div className="details-grid">
-                                      <div className="detail-item">
+                                      <div className="detail-item status-item">
                                         <span className="detail-label">
-                                          <FaInfoCircle className="detail-icon" /> 状态:
+                                          <FaInfoCircle className="detail-icon pulse-animation" /> 状态:
                                         </span>
-                                        <span className={`detail-value status-${taskDetails.status}`}>
+                                        <span className={`detail-value status-badge status-${taskDetails.status}`}>
                                           {taskDetails.status === 'success' && '成功'}
                                           {taskDetails.status === 'failed' && '失败'}
                                           {taskDetails.status === 'in_progress' && '进行中'}
@@ -671,14 +682,14 @@ const ProfileSection = ({
                                       {taskDetails.progress !== undefined && (
                                         <div className="detail-item progress-item">
                                           <span className="detail-label">
-                                            <FaSpinner className="detail-icon" /> 进度:
+                                            <FaSpinner className={taskDetails.status === 'in_progress' ? "detail-icon spinning" : "detail-icon"} /> 进度:
                                           </span>
                                           <span className="detail-value highlight-value">
                                             {taskDetails.progress}%
                                           </span>
                                           <div className="progress-bar detail-progress">
                                             <div
-                                              className="progress-fill"
+                                              className="progress-fill pulse-animation-subtle"
                                               style={{
                                                 width: `${taskDetails.progress}%`,
                                                 background: `linear-gradient(90deg, var(--primary-neon) ${taskDetails.progress}%, var(--primary-dark) ${taskDetails.progress}%)`
@@ -689,21 +700,22 @@ const ProfileSection = ({
                                       )}
 
                                       {taskDetails.plaintext && (
-                                        <div className="detail-item plaintext-item">
+                                        <div className="detail-item plaintext-item highlight-box">
                                           <span className="detail-label">
-                                            <FaUnlock className="detail-icon" /> 明文:
+                                            <FaUnlock className="detail-icon unlock-animation" /> 明文:
                                           </span>
                                           <div className="plaintext-container">
                                             <span className="detail-value highlight-value">
                                               {taskDetails.plaintext}
                                             </span>
                                             <button
-                                              className="copy-button"
+                                              className="copy-button hover-effect"
                                               onClick={() => {
                                                 navigator.clipboard.writeText(taskDetails.plaintext || '');
                                                 toast.success('明文已复制到剪贴板');
                                               }}
                                               title="复制明文"
+                                              aria-label="复制明文到剪贴板"
                                             >
                                               <FaCheck className="copy-icon" />
                                             </button>
@@ -717,12 +729,12 @@ const ProfileSection = ({
 
                                       <div className="details-section">
                                         {taskDetails.tables_searched !== undefined && taskDetails.total_tables !== undefined && (
-                                          <div className="detail-item">
+                                          <div className="detail-item tables-item">
                                             <span className="detail-label">
-                                              <FaSearch className="detail-icon" /> 彩虹表:
+                                              <FaSearch className="detail-icon search-animation" /> 彩虹表:
                                             </span>
                                             <span className="detail-value highlight-value">
-                                              已搜索 {taskDetails.tables_searched} / 共 {taskDetails.total_tables} 张表
+                                              已搜索 <strong className="counter-value">{taskDetails.tables_searched}</strong> / 共 <strong className="counter-value">{taskDetails.total_tables}</strong> 张表
                                             </span>
                                             <div className="detail-explanation">
                                               <FaInfoCircle className="info-icon" />
@@ -732,12 +744,12 @@ const ProfileSection = ({
                                         )}
 
                                         {taskDetails.chains_searched !== undefined && (
-                                          <div className="detail-item">
+                                          <div className="detail-item chains-item">
                                             <span className="detail-label">
                                               <FaProjectDiagram className="detail-icon" /> 哈希链:
                                             </span>
                                             <span className="detail-value highlight-value">
-                                              已搜索 {taskDetails.chains_searched} 条链
+                                              已搜索 <strong className="counter-value">{taskDetails.chains_searched}</strong> 条链
                                             </span>
                                             <div className="detail-explanation">
                                               <FaInfoCircle className="info-icon" />
@@ -747,12 +759,12 @@ const ProfileSection = ({
                                         )}
 
                                         {taskDetails.reduction_attempts !== undefined && (
-                                          <div className="detail-item">
+                                          <div className="detail-item reduction-item">
                                             <span className="detail-label">
-                                              <FaRandom className="detail-icon" /> 规约尝试:
+                                              <FaRandom className="detail-icon random-animation" /> 规约尝试:
                                             </span>
                                             <span className="detail-value highlight-value">
-                                              {getReductionAttemptsText(taskDetails.reduction_attempts)}
+                                              <strong className="counter-value">{getReductionAttemptsText(taskDetails.reduction_attempts)}</strong>
                                             </span>
                                             <div className="detail-explanation">
                                               <FaInfoCircle className="info-icon" />
@@ -762,34 +774,34 @@ const ProfileSection = ({
                                         )}
 
                                         {taskDetails.message && (
-                                          <div className="detail-item">
+                                          <div className="detail-item message-item">
                                             <span className="detail-label">
                                               <FaInfoCircle className="detail-icon" /> 消息:
                                             </span>
-                                            <span className="detail-value">{taskDetails.message}</span>
+                                            <span className="detail-value message-value">{taskDetails.message}</span>
                                           </div>
                                         )}
                                       </div>
 
                                       {/* 添加彩虹表攻击原理说明 */}
-                                      <div className="rainbow-attack-info">
-                                        <h5>彩虹表攻击原理</h5>
-                                        <p>
+                                      <div className="rainbow-attack-info cyber-box">
+                                        <h5 className="attack-title">彩虹表攻击原理</h5>
+                                        <p className="attack-description">
                                           彩虹表是一种时间-空间权衡的密码学攻击方式，用于破解哈希值。
                                           系统通过预先计算的哈希链
-                                          和规约函数（<strong>尝试次数: {getReductionAttemptsText(taskDetails.reduction_attempts)}</strong>）
+                                          和规约函数（<strong className="highlight-text">尝试次数: {getReductionAttemptsText(taskDetails.reduction_attempts)}</strong>）
                                           来尝试还原MD5哈希对应的原始明文。
                                         </p>
                                         <div className="attack-steps">
-                                          <div className="step"><span className="step-num">1</span> 搜索彩虹表</div>
-                                          <div className="step-arrow">→</div>
-                                          <div className="step"><span className="step-num">2</span> 查找匹配链</div>
-                                          <div className="step-arrow">→</div>
-                                          <div className="step"><span className="step-num">3</span> 应用规约函数</div>
-                                          <div className="step-arrow">→</div>
-                                          <div className="step"><span className="step-num">4</span> 重建哈希链</div>
-                                          <div className="step-arrow">→</div>
-                                          <div className="step"><span className="step-num">5</span> 获取明文</div>
+                                          <div className="step"><span className="step-num">1</span> <span className="step-text">搜索彩虹表</span></div>
+                                          <div className="step-arrow pulse-animation">→</div>
+                                          <div className="step"><span className="step-num">2</span> <span className="step-text">查找匹配链</span></div>
+                                          <div className="step-arrow pulse-animation">→</div>
+                                          <div className="step"><span className="step-num">3</span> <span className="step-text">应用规约函数</span></div>
+                                          <div className="step-arrow pulse-animation">→</div>
+                                          <div className="step"><span className="step-num">4</span> <span className="step-text">重建哈希链</span></div>
+                                          <div className="step-arrow pulse-animation">→</div>
+                                          <div className="step"><span className="step-num">5</span> <span className="step-text">获取明文</span></div>
                                         </div>
                                       </div>
                                     </div>

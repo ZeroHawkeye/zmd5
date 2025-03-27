@@ -1909,3 +1909,46 @@ body {
 .login-required-message p {
   margin: 0;
 }
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #0a0e17;
+  color: #e0e0e0;
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-container h1 {
+  color: #ff4444;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-family: var(--header-font);
+}
+
+.error-container p {
+  color: #a0aec0;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.error-container button {
+  background-color: #56f89a;
+  color: #0a0e17;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.error-container button:hover {
+  background-color: #4ae088;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(86, 248, 154, 0.2);
+}

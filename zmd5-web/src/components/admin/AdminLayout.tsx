@@ -2,7 +2,7 @@ import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { User } from '../../types/index';
 import { checkAuthStatus } from '../../api/auth';
-import { FiHome, FiDatabase, FiHash, FiList, FiArrowLeft, FiUser } from 'react-icons/fi';
+import { FiHome, FiDatabase, FiHash, FiList, FiArrowLeft, FiUser, FiActivity } from 'react-icons/fi';
 
 const AdminLayout = () => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -94,6 +94,12 @@ const AdminLayout = () => {
               <Link to="/admin/md5-management">
                 <FiList className="nav-icon" />
                 <span className="nav-text">MD5管理</span>
+              </Link>
+            </li>
+            <li className={isActive('/admin/task-management') ? 'active' : ''}>
+              <Link to="/admin/task-management">
+                <FiActivity className="nav-icon" />
+                <span className="nav-text">任务管理</span>
               </Link>
             </li>
             <li className="return-link">

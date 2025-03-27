@@ -75,6 +75,10 @@ type TaskProgress struct {
 var taskProgressMap = make(map[uint]*TaskProgress)
 var taskProgressMutex sync.RWMutex // 用于保护map的并发访问
 
+// 添加任务取消信号映射表
+var taskCancelMap = make(map[uint]bool)
+var taskCancelMutex sync.RWMutex // 用于保护取消信号map的并发访问
+
 // 添加上次更新时间和更新频率控制
 var lastDBUpdateMap = make(map[uint]time.Time)
 var significantProgressThreshold = 5 // 进度变化超过5%才更新数据库
@@ -208,6 +212,31 @@ func updateTaskProgress(taskID uint, update func(*TaskProgress)) {
 	}
 }
 
+// 检查任务是否被取消
+func isTaskCancelled(taskID uint) bool {
+	taskCancelMutex.RLock()
+	defer taskCancelMutex.RUnlock()
+
+	cancelled, exists := taskCancelMap[taskID]
+	return exists && cancelled
+}
+
+// 设置任务取消状态
+func setTaskCancelled(taskID uint, cancelled bool) {
+	taskCancelMutex.Lock()
+	defer taskCancelMutex.Unlock()
+
+	taskCancelMap[taskID] = cancelled
+}
+
+// 清除任务取消状态
+func clearTaskCancelStatus(taskID uint) {
+	taskCancelMutex.Lock()
+	defer taskCancelMutex.Unlock()
+
+	delete(taskCancelMap, taskID)
+}
+
 // 删除任务进度
 func removeTaskProgress(taskID uint) {
 	taskProgressMutex.Lock()
@@ -218,6 +247,9 @@ func removeTaskProgress(taskID uint) {
 
 	// 同时清理更新时间记录
 	delete(lastDBUpdateMap, taskID)
+
+	// 清理取消状态
+	clearTaskCancelStatus(taskID)
 }
 
 // InitTaskProgress 从数据库加载未完成的任务
@@ -592,9 +624,19 @@ func searchWithRainbowTable(hashToSearch string, recordID uint) string {
 		})
 	}
 
+	// 检查任务是否已被取消
+	if recordID > 0 && isTaskCancelled(recordID) {
+		return ""
+	}
+
 	// 首先在数据库中查找哈希值匹配的终端哈希
 	var tables []dbModel.RainbowTable
 	if err := db.PG.Where("end_hash = ?", hashToSearch).Find(&tables).Error; err != nil {
+		return ""
+	}
+
+	// 检查任务是否已被取消
+	if recordID > 0 && isTaskCancelled(recordID) {
 		return ""
 	}
 
@@ -612,6 +654,11 @@ func searchWithRainbowTable(hashToSearch string, recordID uint) string {
 
 	// 如果直接找到了匹配的终端哈希，使用对应的链进行查找
 	for tableIndex, table := range tables {
+		// 检查任务是否已被取消
+		if recordID > 0 && isTaskCancelled(recordID) {
+			return ""
+		}
+
 		// 更新查找的表数量
 		if recordID > 0 {
 			updateTaskProgress(recordID, func(progress *TaskProgress) {
@@ -650,9 +697,19 @@ func searchWithRainbowTable(hashToSearch string, recordID uint) string {
 		}
 	}
 
+	// 检查任务是否已被取消
+	if recordID > 0 && isTaskCancelled(recordID) {
+		return ""
+	}
+
 	// 如果没有找到直接匹配，遍历所有彩虹表
 	var allTables []dbModel.RainbowTable
 	if err := db.PG.Find(&allTables).Error; err != nil {
+		return ""
+	}
+
+	// 检查任务是否已被取消
+	if recordID > 0 && isTaskCancelled(recordID) {
 		return ""
 	}
 
@@ -680,6 +737,11 @@ func searchWithRainbowTable(hashToSearch string, recordID uint) string {
 
 	// 对每个表进行查找
 	for tableIndex, table := range allTables {
+		// 检查任务是否已被取消
+		if recordID > 0 && isTaskCancelled(recordID) {
+			return ""
+		}
+
 		// 更新进度（从30%到90%）和已搜索表数
 		if recordID > 0 && progressStep > 0 {
 			progress := 30 + progressStep*(tableIndex+1)
@@ -705,6 +767,11 @@ func searchWithRainbowTable(hashToSearch string, recordID uint) string {
 
 		// 尝试每个可能的位置
 		for i := 0; i < table.ChainLength-1; i++ {
+			// 检查任务是否已被取消
+			if recordID > 0 && isTaskCancelled(recordID) {
+				return ""
+			}
+
 			// 更新规约函数尝试次数
 			if recordID > 0 {
 				updateTaskProgress(recordID, func(progress *TaskProgress) {
@@ -748,6 +815,11 @@ func searchWithRainbowTable(hashToSearch string, recordID uint) string {
 				// 继续搜索链中其他可能的位置
 				currentPlaintext := potentialPlaintext
 				for j := i; j < table.ChainLength-1; j++ {
+					// 检查任务是否已被取消
+					if recordID > 0 && isTaskCancelled(recordID) {
+						return ""
+					}
+
 					// 更新规约函数尝试次数
 					if recordID > 0 {
 						updateTaskProgress(recordID, func(progress *TaskProgress) {
@@ -791,6 +863,11 @@ func searchWithRainbowTable(hashToSearch string, recordID uint) string {
 				progress.ChainsSearched++
 			})
 		}
+	}
+
+	// 检查任务是否已被取消
+	if recordID > 0 && isTaskCancelled(recordID) {
+		return ""
 	}
 
 	// 如果recordID有效，更新任务进度为100%（即使失败也是完成了）
@@ -1367,5 +1444,252 @@ func FinishTask(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"success": true,
 		"message": "已成功结束任务",
+	})
+}
+
+// TaskManagementRequest 任务管理请求参数
+type TaskManagementRequest struct {
+	Page     int `json:"page" query:"page"`           // 页码
+	PageSize int `json:"page_size" query:"page_size"` // 每页数量
+	Status   int `json:"status" query:"status"`       // 任务状态筛选
+}
+
+// TaskManagementResponse 任务管理响应
+type TaskManagementResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message,omitempty"`
+	Data    struct {
+		Total int64 `json:"total"` // 总任务数
+		Tasks []struct {
+			ID            uint   `json:"id"`             // 任务ID
+			UserID        uint   `json:"user_id"`        // 用户ID
+			Hash          string `json:"hash"`           // MD5哈希
+			PlainText     string `json:"plain_text"`     // 明文
+			Type          int    `json:"type"`           // 任务类型
+			Status        int    `json:"status"`         // 操作状态
+			DecryptStatus int    `json:"decrypt_status"` // 解密状态
+			Progress      int    `json:"progress"`       // 进度
+			CreatedAt     string `json:"created_at"`     // 创建时间
+			UpdatedAt     string `json:"updated_at"`     // 更新时间
+			// 详细信息
+			TablesSearched    int `json:"tables_searched"`    // 已搜索的彩虹表数量
+			TotalTables       int `json:"total_tables"`       // 总彩虹表数量
+			ChainsSearched    int `json:"chains_searched"`    // 已搜索的链数量
+			ReductionAttempts int `json:"reduction_attempts"` // 规约函数应用次数
+		} `json:"tasks"`
+	} `json:"data"`
+}
+
+// TaskManagement 任务管理接口
+func TaskManagement(c *fiber.Ctx) error {
+	var req TaskManagementRequest
+	if err := c.QueryParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(TaskManagementResponse{
+			Success: false,
+			Message: "无效的请求参数",
+		})
+	}
+
+	// 设置默认值
+	if req.Page < 1 {
+		req.Page = 1
+	}
+	if req.PageSize < 1 {
+		req.PageSize = 10
+	}
+
+	// 构建查询
+	query := db.PG.Model(&dbModel.MD5Record{})
+
+	// 如果指定了状态，添加状态筛选
+	if req.Status > 0 {
+		query = query.Where("decrypt_status = ?", req.Status)
+	}
+
+	// 获取总记录数
+	var total int64
+	if err := query.Count(&total).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(TaskManagementResponse{
+			Success: false,
+			Message: "获取任务总数失败",
+		})
+	}
+
+	// 获取分页数据
+	var records []dbModel.MD5Record
+	if err := query.Order("created_at DESC").
+		Offset((req.Page - 1) * req.PageSize).
+		Limit(req.PageSize).
+		Find(&records).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(TaskManagementResponse{
+			Success: false,
+			Message: "获取任务列表失败",
+		})
+	}
+
+	// 构建响应数据
+	var tasks []struct {
+		ID                uint   `json:"id"`
+		UserID            uint   `json:"user_id"`
+		Hash              string `json:"hash"`
+		PlainText         string `json:"plain_text"`
+		Type              int    `json:"type"`
+		Status            int    `json:"status"`
+		DecryptStatus     int    `json:"decrypt_status"`
+		Progress          int    `json:"progress"`
+		CreatedAt         string `json:"created_at"`
+		UpdatedAt         string `json:"updated_at"`
+		TablesSearched    int    `json:"tables_searched"`
+		TotalTables       int    `json:"total_tables"`
+		ChainsSearched    int    `json:"chains_searched"`
+		ReductionAttempts int    `json:"reduction_attempts"`
+	}
+
+	for _, record := range records {
+		task := struct {
+			ID                uint   `json:"id"`
+			UserID            uint   `json:"user_id"`
+			Hash              string `json:"hash"`
+			PlainText         string `json:"plain_text"`
+			Type              int    `json:"type"`
+			Status            int    `json:"status"`
+			DecryptStatus     int    `json:"decrypt_status"`
+			Progress          int    `json:"progress"`
+			CreatedAt         string `json:"created_at"`
+			UpdatedAt         string `json:"updated_at"`
+			TablesSearched    int    `json:"tables_searched"`
+			TotalTables       int    `json:"total_tables"`
+			ChainsSearched    int    `json:"chains_searched"`
+			ReductionAttempts int    `json:"reduction_attempts"`
+		}{
+			ID:            record.ID,
+			UserID:        record.UserID,
+			Hash:          record.Hash,
+			PlainText:     record.PlainText,
+			Type:          record.Type,
+			Status:        record.Status,
+			DecryptStatus: record.DecryptStatus,
+			Progress:      record.Progress,
+			CreatedAt:     record.CreatedAt.Format("2006-01-02 15:04:05"),
+			UpdatedAt:     record.UpdatedAt.Format("2006-01-02 15:04:05"),
+		}
+
+		// 获取任务详细信息
+		var detail dbModel.TaskProgressRecord
+		if err := db.PG.Where("task_id = ?", record.ID).First(&detail).Error; err == nil {
+			task.TablesSearched = detail.TablesSearched
+			task.TotalTables = detail.TotalTables
+			task.ChainsSearched = detail.ChainsSearched
+			task.ReductionAttempts = detail.ReductionAttempts
+		}
+
+		tasks = append(tasks, task)
+	}
+
+	return c.JSON(TaskManagementResponse{
+		Success: true,
+		Data: struct {
+			Total int64 `json:"total"`
+			Tasks []struct {
+				ID                uint   `json:"id"`
+				UserID            uint   `json:"user_id"`
+				Hash              string `json:"hash"`
+				PlainText         string `json:"plain_text"`
+				Type              int    `json:"type"`
+				Status            int    `json:"status"`
+				DecryptStatus     int    `json:"decrypt_status"`
+				Progress          int    `json:"progress"`
+				CreatedAt         string `json:"created_at"`
+				UpdatedAt         string `json:"updated_at"`
+				TablesSearched    int    `json:"tables_searched"`
+				TotalTables       int    `json:"total_tables"`
+				ChainsSearched    int    `json:"chains_searched"`
+				ReductionAttempts int    `json:"reduction_attempts"`
+			} `json:"tasks"`
+		}{
+			Total: total,
+			Tasks: tasks,
+		},
+	})
+}
+
+// CancelTask 取消解密任务
+func CancelTask(c *fiber.Ctx) error {
+	// 获取任务ID
+	taskID := c.Params("id")
+	if taskID == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "请提供任务ID",
+		})
+	}
+
+	// 将taskID转换为uint
+	id, err := strconv.ParseUint(taskID, 10, 32)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "无效的任务ID",
+		})
+	}
+	taskIDUint := uint(id)
+
+	// 获取当前用户ID
+	userID := c.Locals("userID")
+	if userID == nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"success": false,
+			"message": "用户未认证",
+		})
+	}
+
+	// 首先从数据库中查询任务记录，确认它存在
+	var record dbModel.MD5Record
+	if err := db.PG.First(&record, taskIDUint).Error; err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"success": false,
+			"message": "未找到指定任务",
+		})
+	}
+
+	// 检查任务状态，只有正在进行中的任务才能被取消
+	if record.DecryptStatus != dbModel.DecryptInProgress {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "只能取消正在进行中的任务",
+		})
+	}
+
+	// 设置任务取消标志
+	setTaskCancelled(taskIDUint, true)
+
+	// 更新任务状态为已取消
+	updates := map[string]interface{}{
+		"decrypt_status": dbModel.DecryptFailed,
+		"progress":       100, // 设置进度为100%表示任务已完成
+	}
+
+	if err := db.PG.Model(&dbModel.MD5Record{}).Where("id = ?", taskIDUint).Updates(updates).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"message": "更新任务状态失败",
+		})
+	}
+
+	// 如果任务在内存中存在，也更新内存中的状态
+	taskProgress := getTaskProgress(taskIDUint)
+	if taskProgress != nil {
+		updateTaskProgress(taskIDUint, func(progress *TaskProgress) {
+			progress.Status = dbModel.DecryptFailed
+			progress.Progress = 100
+		})
+
+		// 任务完成后从内存中移除
+		removeTaskProgress(taskIDUint)
+	}
+
+	return c.JSON(fiber.Map{
+		"success": true,
+		"message": "已成功取消任务",
 	})
 }

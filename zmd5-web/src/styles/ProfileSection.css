@@ -54,8 +54,15 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 头部区域 */
@@ -240,7 +247,7 @@
   position: relative;
   overflow: hidden;
   /* 添加网格线条背景效果 */
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
   background-size: 20px 20px;
@@ -326,8 +333,13 @@
 }
 
 @keyframes pulseGlow {
-  0% { box-shadow: 0 0 10px rgba(0, 255, 65, 0.3); }
-  100% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.6); }
+  0% {
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+  }
+
+  100% {
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.6);
+  }
 }
 
 .default-avatar {
@@ -494,6 +506,7 @@
     opacity: 0;
     transform: translateY(5px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -534,9 +547,20 @@
 }
 
 @keyframes floatingTag {
-  0% { transform: translateY(0) rotate(0deg); box-shadow: 0 0 12px rgba(0, 255, 65, 0.6); }
-  50% { transform: translateY(-3px) rotate(2deg); box-shadow: 0 0 18px rgba(0, 255, 65, 0.8); }
-  100% { transform: translateY(0) rotate(0deg); box-shadow: 0 0 12px rgba(0, 255, 65, 0.6); }
+  0% {
+    transform: translateY(0) rotate(0deg);
+    box-shadow: 0 0 12px rgba(0, 255, 65, 0.6);
+  }
+
+  50% {
+    transform: translateY(-3px) rotate(2deg);
+    box-shadow: 0 0 18px rgba(0, 255, 65, 0.8);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0deg);
+    box-shadow: 0 0 12px rgba(0, 255, 65, 0.6);
+  }
 }
 
 .history-item::after {
@@ -546,12 +570,12 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(0, 255, 65, 0.2) 25%, 
-    rgba(0, 255, 65, 0.3) 50%, 
-    rgba(0, 255, 65, 0.2) 75%, 
-    transparent 100%);
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(0, 255, 65, 0.2) 25%,
+      rgba(0, 255, 65, 0.3) 50%,
+      rgba(0, 255, 65, 0.2) 75%,
+      transparent 100%);
   transform: scaleX(0.3);
   opacity: 0;
   transition: all 0.3s ease;
@@ -624,7 +648,8 @@
   margin-bottom: 12px;
 }
 
-.history-hash, .history-result {
+.history-hash,
+.history-result {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -634,7 +659,8 @@
   transition: all 0.2s ease;
 }
 
-.history-hash:hover, .history-result:hover {
+.history-hash:hover,
+.history-result:hover {
   background: rgba(0, 255, 65, 0.05);
 }
 
@@ -779,23 +805,26 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(255, 255, 255, 0.1) 25%,
-    transparent 25%,
-    transparent 50%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0.1) 75%,
-    transparent 75%
-  );
+  background: linear-gradient(45deg,
+      rgba(255, 255, 255, 0.1) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.1) 75%,
+      transparent 75%);
   background-size: 20px 20px;
   animation: progressStripes 1s linear infinite;
   z-index: 1;
 }
 
 @keyframes progressStripes {
-  0% { background-position: 0 0; }
-  100% { background-position: 20px 0; }
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 20px 0;
+  }
 }
 
 .task-actions {
@@ -819,8 +848,15 @@
 }
 
 @keyframes expandDetails {
-  from { max-height: 0; opacity: 0; }
-  to { max-height: 800px; opacity: 1; }
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  to {
+    max-height: 800px;
+    opacity: 1;
+  }
 }
 
 .task-details::before {
@@ -830,9 +866,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at top right, 
-    rgba(0, 255, 65, 0.1), 
-    transparent 70%);
+  background: radial-gradient(circle at top right,
+      rgba(0, 255, 65, 0.1),
+      transparent 70%);
   pointer-events: none;
 }
 
@@ -893,9 +929,17 @@
 }
 
 @keyframes highlightGlow {
-  0% { box-shadow: 0 0 5px rgba(0, 255, 65, 0.2); }
-  50% { box-shadow: 0 0 15px rgba(0, 255, 65, 0.4); }
-  100% { box-shadow: 0 0 5px rgba(0, 255, 65, 0.2); }
+  0% {
+    box-shadow: 0 0 5px rgba(0, 255, 65, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.4);
+  }
+
+  100% {
+    box-shadow: 0 0 5px rgba(0, 255, 65, 0.2);
+  }
 }
 
 .plaintext-container {
@@ -1077,9 +1121,20 @@
 }
 
 @keyframes arrowPulse {
-  0% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.2); }
-  100% { opacity: 0.5; transform: scale(1); }
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
 }
 
 /* 响应式样式调整 */
@@ -1089,51 +1144,53 @@
     align-items: flex-start;
     gap: 8px;
   }
-  
-  .history-type, .history-time {
+
+  .history-type,
+  .history-time {
     width: 100%;
   }
-  
+
   .history-time {
     text-align: left;
   }
-  
+
   .attack-steps {
     flex-direction: column;
     gap: 5px;
   }
-  
+
   .step-arrow {
     transform: rotate(90deg);
     margin: 0 auto;
   }
-  
+
   .plaintext-container {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .value {
     max-width: 100%;
     padding: 8px;
   }
-  
+
   .value-container {
     flex-direction: column;
+
     align-items: flex-start;
   }
-  
+
   .copy-button {
     margin-top: 5px;
     align-self: flex-end;
   }
-  
+
   .task-details-content .details-header {
     flex-direction: column;
     gap: 10px;
     align-items: flex-start;
   }
-  
+
   .refresh-button {
     width: 100%;
     justify-content: center;
@@ -1162,20 +1219,41 @@
 
 /* 动画和过渡效果 */
 @keyframes glowPulse {
-  0% { text-shadow: 0 0 5px rgba(0, 255, 65, 0.5); }
-  50% { text-shadow: 0 0 12px rgba(0, 255, 65, 0.8), 0 0 20px rgba(0, 255, 65, 0.4); }
-  100% { text-shadow: 0 0 5px rgba(0, 255, 65, 0.5); }
+  0% {
+    text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+  }
+
+  50% {
+    text-shadow: 0 0 12px rgba(0, 255, 65, 0.8), 0 0 20px rgba(0, 255, 65, 0.4);
+  }
+
+  100% {
+    text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+  }
 }
 
 @keyframes borderGlow {
-  0% { border-color: rgba(0, 255, 65, 0.3); }
-  50% { border-color: rgba(0, 255, 65, 0.7); }
-  100% { border-color: rgba(0, 255, 65, 0.3); }
+  0% {
+    border-color: rgba(0, 255, 65, 0.3);
+  }
+
+  50% {
+    border-color: rgba(0, 255, 65, 0.7);
+  }
+
+  100% {
+    border-color: rgba(0, 255, 65, 0.3);
+  }
 }
 
 @keyframes highlightFade {
-  0% { background-color: rgba(0, 255, 65, 0.2); }
-  100% { background-color: transparent; }
+  0% {
+    background-color: rgba(0, 255, 65, 0.2);
+  }
+
+  100% {
+    background-color: transparent;
+  }
 }
 
 /* 分页包装器 */
@@ -1215,9 +1293,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at top right, 
-    rgba(0, 255, 65, 0.1), 
-    transparent 70%);
+  background: radial-gradient(circle at top right,
+      rgba(0, 255, 65, 0.1),
+      transparent 70%);
   pointer-events: none;
 }
 
@@ -1241,10 +1319,8 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(
-    rgba(0, 255, 65, 0.1),
-    transparent
-  );
+  background: linear-gradient(rgba(0, 255, 65, 0.1),
+      transparent);
   transform: rotate(35deg);
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -1316,8 +1392,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* 响应式设计补充 */
@@ -1327,11 +1408,11 @@
     padding: 12px;
     gap: 10px;
   }
-  
+
   .pagination .hacker-button {
     width: 100%;
   }
-  
+
   .page-info {
     width: 100%;
   }
@@ -1356,9 +1437,17 @@
 }
 
 @keyframes pulseNewTag {
-  0% { opacity: 0.7; }
-  50% { opacity: 1; }
-  100% { opacity: 0.7; }
+  0% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.7;
+  }
 }
 
 .details-buttons {
@@ -1417,9 +1506,11 @@
   0% {
     opacity: 0.8;
   }
+
   50% {
     opacity: 1;
   }
+
   100% {
     opacity: 0.8;
   }
@@ -1532,6 +1623,7 @@
     opacity: 0;
     transform: scale(0.9);
   }
+
   100% {
     opacity: 1;
     transform: scale(1);
@@ -1542,13 +1634,519 @@
   .popconfirm-content {
     width: 95%;
   }
-  
+
   .popconfirm-actions {
     flex-direction: column-reverse;
   }
-  
+
   .popconfirm .cancel-button,
   .popconfirm .confirm-button {
     width: 100%;
   }
-} 
+}
+
+/* 添加以下新样式 */
+
+/* 通用动画效果 */
+.pulse-animation {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.pulse-animation-subtle {
+  animation: pulse-subtle 3s infinite ease-in-out;
+}
+
+.search-animation {
+  animation: search-rotate 3s infinite linear;
+}
+
+.random-animation {
+  animation: random-shake 2s infinite ease-in-out;
+}
+
+.unlock-animation {
+  animation: unlock 2s 1 ease-in-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.scale-in {
+  animation: scaleIn 0.3s ease-in-out;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+@keyframes pulse-subtle {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+@keyframes search-rotate {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes random-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-3px); }
+  40% { transform: translateX(3px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+@keyframes unlock {
+  0% { transform: translateX(0) rotate(0); }
+  25% { transform: translateX(-5px) rotate(-10deg); }
+  50% { transform: translateX(5px) rotate(10deg); }
+  75% { transform: translateX(-5px) rotate(-10deg); }
+  100% { transform: translateX(0) rotate(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* 玻璃效果 */
+.glass-effect {
+  background: rgba(0, 30, 60, 0.25);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 10px;
+  transition: all 0.3s;
+}
+
+.glass-effect:hover {
+  background: rgba(0, 40, 80, 0.35);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.2);
+}
+
+/* 历史记录项样式优化 */
+.history-item {
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background: rgba(0, 20, 40, 0.8);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.history-item:hover {
+  border-color: rgba(0, 255, 255, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 5px rgba(0, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.latest-item {
+  border-color: rgba(0, 255, 255, 0.4);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.15);
+}
+
+/* 操作类型样式 */
+.operation-type {
+  font-weight: 600;
+  margin-left: 5px;
+  color: #00ffff;
+}
+
+/* 文本效果 */
+.glow-text {
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+  letter-spacing: 0.5px;
+}
+
+.bright-label {
+  color: #00ffff;
+  font-weight: 600;
+}
+
+.highlight-text {
+  color: #00ffff;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.7);
+}
+
+/* 按钮效果 */
+.hover-effect {
+  transition: all 0.2s ease;
+}
+
+.hover-effect:hover {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+}
+
+.hover-effect:active {
+  transform: scale(0.95);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+}
+
+/* 任务详情样式优化 */
+.task-details {
+  margin-top: 15px;
+  border-top: 1px dashed rgba(0, 255, 255, 0.2);
+  padding-top: 15px;
+}
+
+.details-title {
+  color: #00ffff;
+  font-size: 1.1em;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+  margin: 0;
+}
+
+.details-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* 状态徽章 */
+.status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.status-success {
+  background-color: rgba(0, 180, 0, 0.2);
+  color: #00ff00;
+  border: 1px solid rgba(0, 180, 0, 0.5);
+}
+
+.status-failed {
+  background-color: rgba(180, 0, 0, 0.2);
+  color: #ff5555;
+  border: 1px solid rgba(180, 0, 0, 0.5);
+}
+
+.status-in_progress {
+  background-color: rgba(180, 180, 0, 0.2);
+  color: #ffff00;
+  border: 1px solid rgba(180, 180, 0, 0.5);
+}
+
+.status-error {
+  background-color: rgba(180, 0, 0, 0.2);
+  color: #ff5555;
+  border: 1px solid rgba(180, 0, 0, 0.5);
+}
+
+/* 高亮框 */
+.highlight-box {
+  background: rgba(0, 70, 100, 0.2);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 10px;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+}
+
+/* 计数器值高亮 */
+.counter-value {
+  color: #00ffff;
+  font-weight: 600;
+}
+
+/* 按钮内文本 */
+.button-text {
+  margin-left: 5px;
+}
+
+/* 彩虹表攻击信息样式 */
+.cyber-box {
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  background: rgba(0, 30, 60, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px;
+  position: relative;
+}
+
+.cyber-box::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  bottom: -1px;
+  border-radius: 8px;
+  background: linear-gradient(45deg, rgba(0, 255, 255, 0.5), transparent, rgba(0, 255, 255, 0.5));
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.attack-title {
+  color: #00ffff;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+  text-align: center;
+  margin-top: 0;
+  font-size: 1.1em;
+}
+
+.attack-description {
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: justify;
+}
+
+/* 攻击步骤优化 */
+.attack-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 15px;
+  gap: 5px;
+}
+
+.step {
+  background: rgba(0, 40, 70, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.step:hover {
+  background: rgba(0, 60, 100, 0.6);
+  border-color: rgba(0, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.step-num {
+  background: rgba(0, 255, 255, 0.2);
+  color: #00ffff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8em;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.step-text {
+  font-size: 0.9em;
+}
+
+.step-arrow {
+  color: #00ffff;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* 进度条优化 */
+.progress-bar.detail-progress {
+  height: 8px;
+  border-radius: 4px;
+  margin-top: 5px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* 加载状态文本 */
+.loading-text {
+  margin-left: 5px;
+  font-style: italic;
+}
+
+/* 移动端优化部分 - 添加到文件末尾 */
+
+/* 移动端响应式优化 */
+@media (max-width: 576px) {
+  /* 历史记录项优化 */
+  .history-item {
+    padding: 10px;
+  }
+
+  .history-main-data {
+    gap: 8px;
+  }
+
+  /* 值容器垂直布局 */
+  .value-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .copy-button {
+    align-self: flex-end;
+    margin-top: -30px; /* 向上偏移，与值内容重叠 */
+  }
+  
+  /* 任务详情优化 */
+  .task-details-content {
+    gap: 10px;
+  }
+  
+  .details-grid {
+    gap: 8px;
+  }
+  
+  /* 彩虹表信息优化 */
+  .rainbow-attack-info {
+    padding: 10px;
+  }
+  
+  .attack-steps {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 5px;
+  }
+  
+  .step-arrow {
+    transform: rotate(90deg);
+    align-self: center;
+    margin: 0;
+  }
+  
+  .step {
+    justify-content: center;
+  }
+  
+  /* 状态徽章优化 */
+  .status-badge {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* 详情按钮优化 */
+  .details-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+  
+  .refresh-button, .stop-button {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* 详情项目优化 */
+  .detail-item {
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 360px) {
+  .history-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .history-type, .history-time {
+    width: 100%;
+  }
+  
+  .card {
+    padding: 10px;
+  }
+  
+  .value, .detail-value {
+    font-size: 0.75rem;
+    word-break: break-all;
+  }
+  
+  .attack-description {
+    font-size: 0.8rem;
+  }
+  
+  .rainbow-attack-info h5 {
+    font-size: 0.9rem;
+  }
+  
+  /* 修复内容溢出 */
+  .details-grid, .detail-item, .history-content {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+/* 修复网格内容溢出问题 */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+/* 防止长文本溢出 */
+.value, .detail-value, .hash-value, .result-value {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* 新增的移动端容器适配 */
+@media (max-width: 576px) {
+  .cyber-box {
+    padding: 10px;
+  }
+  
+  .highlight-box {
+    padding: 8px;
+  }
+  
+  .glass-effect {
+    padding: 8px;
+  }
+  
+  /* 数值高亮文本溢出修复 */
+  .highlight-value, .counter-value {
+    max-width: 100%;
+    word-break: break-all;
+  }
+  
+  /* 确保步骤容器不溢出 */
+  .step {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* 修复明文容器在移动端的显示 */
+  .plaintext-container {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .plaintext-container .copy-button {
+    align-self: flex-end;
+    margin-top: -30px;
+  }
+}

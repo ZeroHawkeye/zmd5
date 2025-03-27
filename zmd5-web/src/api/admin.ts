@@ -469,94 +469,23 @@ export const generateMD5 = async (texts: string[]): Promise<ApiResponse<RainbowT
  * 获取所有MD5记录
  */
 export const getAllMD5Records = async (
-  page = 1, 
-  pageSize = 20, 
-  search = '', 
-  type = 'all'
+  page: number,
+  pageSize: number,
+  search: string = '',
+  type: 'all' | 'plaintext' | 'md5' = 'all'
 ): Promise<ApiResponse<any>> => {
   try {
-    // 使用模拟数据
-    if (MOCK_DATA.enabled) {
-      // 模拟延迟
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // 创建模拟数据
-      const mockData = [];
-      for (let i = 0; i < pageSize; i++) {
-        const id = (page - 1) * pageSize + i + 1;
-        mockData.push({
-          id,
-          plaintext: `测试明文 ${id}`,
-          md5: `e10adc3949ba59abbe56e057f20f883${id % 10}`,
-          md5_16: `e10adc3949ba59a${id % 10}`,
-          created_at: new Date(Date.now() - id * 86400000).toISOString()
-        });
-      }
-      
-      return {
-        success: true,
-        message: '获取MD5记录成功（模拟数据）',
-        data: {
-          total: 100,
-          records: mockData,
-          page,
-          pageSize
-        }
-      };
-    }
-    
     const authHeaders = getAuthHeaders();
-    
-    // 检查是否有认证令牌
-    if (!authHeaders['Authorization']) {
-      return {
-        success: false,
-        message: '需要管理员权限才能查看MD5记录',
-        data: null,
-      };
-    }
-    
-    // 构建URL和查询参数
-    const queryParams = new URLSearchParams();
-    queryParams.append('page', page.toString());
-    queryParams.append('pageSize', pageSize.toString());
-    
-    if (search) {
-      queryParams.append('search', search);
-      queryParams.append('type', type);
-    }
-    
-    const url = `${API_URL}/api/admin/md5/management?${queryParams.toString()}`;
-    
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: authHeaders,
+    const response = await fetch(`${API_URL}/api/admin/md5/management?page=${page}&page_size=${pageSize}&search=${search}&type=${type}`, {
+      headers: authHeaders
     });
-
-    if (!response.ok) {
-      // 特殊处理401错误
-      if (response.status === 401) {
-        return {
-          success: false,
-          message: '没有管理员权限或登录已过期',
-          data: null,
-        };
-      }
-      
-      return {
-        success: false,
-        message: '获取MD5记录失败',
-        data: null,
-      };
-    }
-
-    return await response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('获取MD5记录出错:', error);
+    console.error('获取MD5记录失败:', error);
     return {
       success: false,
-      message: '网络错误，请稍后再试',
-      data: null,
+      message: '获取MD5记录失败'
     };
   }
 };
@@ -566,58 +495,16 @@ export const getAllMD5Records = async (
  */
 export const deleteMD5Record = async (id: number): Promise<ApiResponse<null>> => {
   try {
-    // 使用模拟数据
-    if (MOCK_DATA.enabled) {
-      // 模拟延迟
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      return {
-        success: true,
-        message: '删除MD5记录成功（模拟数据）',
-        data: null
-      };
-    }
-    
-    const authHeaders = getAuthHeaders();
-    
-    // 检查是否有认证令牌
-    if (!authHeaders['Authorization']) {
-      return {
-        success: false,
-        message: '需要管理员权限才能删除MD5记录',
-        data: null,
-      };
-    }
-    
     const response = await fetch(`${API_URL}/api/admin/md5/records/${id}`, {
-      method: 'DELETE',
-      headers: authHeaders,
+      method: 'DELETE'
     });
-
-    if (!response.ok) {
-      // 特殊处理401错误
-      if (response.status === 401) {
-        return {
-          success: false,
-          message: '没有管理员权限或登录已过期',
-          data: null,
-        };
-      }
-      
-      return {
-        success: false,
-        message: '删除MD5记录失败',
-        data: null,
-      };
-    }
-
-    return await response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error('删除MD5记录出错:', error);
+    console.error('删除MD5记录失败:', error);
     return {
       success: false,
-      message: '网络错误，请稍后再试',
-      data: null,
+      message: '删除MD5记录失败'
     };
   }
 };
@@ -666,6 +553,129 @@ export const uploadFile = async (formData: FormData): Promise<ApiResponse<any>> 
     return await response.json();
   } catch (error) {
     console.error('上传文件出错:', error);
+    return {
+      success: false,
+      message: '网络错误，请稍后再试',
+      data: null,
+    };
+  }
+};
+
+/**
+ * 获取任务管理列表
+ */
+export const getTaskManagement = async (
+  page: number = 1,
+  pageSize: number = 10,
+  status: number = 0
+): Promise<ApiResponse<{
+  total: number;
+  tasks: Array<{
+    id: number;
+    user_id: number;
+    hash: string;
+    plain_text: string;
+    type: number;
+    status: number;
+    decrypt_status: number;
+    progress: number;
+    created_at: string;
+    updated_at: string;
+    tables_searched: number;
+    total_tables: number;
+    chains_searched: number;
+    reduction_attempts: number;
+  }>;
+}>> => {
+  try {
+    const authHeaders = getAuthHeaders();
+    
+    // 检查是否有认证令牌
+    if (!authHeaders['Authorization']) {
+      return {
+        success: false,
+        message: '需要管理员权限才能查看任务列表',
+        data: null,
+      };
+    }
+    
+    const response = await fetch(
+      `${API_URL}/api/admin/task/management?page=${page}&page_size=${pageSize}&status=${status}`,
+      {
+        method: 'GET',
+        headers: authHeaders,
+      }
+    );
+
+    if (!response.ok) {
+      // 特殊处理401错误
+      if (response.status === 401) {
+        return {
+          success: false,
+          message: '没有管理员权限或登录已过期',
+          data: null,
+        };
+      }
+      
+      return {
+        success: false,
+        message: '获取任务列表失败',
+        data: null,
+      };
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('获取任务列表出错:', error);
+    return {
+      success: false,
+      message: '网络错误，请稍后再试',
+      data: null,
+    };
+  }
+};
+
+/**
+ * 取消任务
+ */
+export const cancelTask = async (taskId: number): Promise<ApiResponse<null>> => {
+  try {
+    const authHeaders = getAuthHeaders();
+    
+    // 检查是否有认证令牌
+    if (!authHeaders['Authorization']) {
+      return {
+        success: false,
+        message: '需要管理员权限才能取消任务',
+        data: null,
+      };
+    }
+    
+    const response = await fetch(`${API_URL}/api/admin/task/cancel/${taskId}`, {
+      method: 'POST',
+      headers: authHeaders,
+    });
+
+    if (!response.ok) {
+      // 特殊处理401错误
+      if (response.status === 401) {
+        return {
+          success: false,
+          message: '没有管理员权限或登录已过期',
+          data: null,
+        };
+      }
+      
+      return {
+        success: false,
+        message: '取消任务失败',
+        data: null,
+      };
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('取消任务出错:', error);
     return {
       success: false,
       message: '网络错误，请稍后再试',

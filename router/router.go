@@ -36,6 +36,10 @@ func SetupRoutes(app *fiber.App) {
 	adminRoutes.Post("/rainbow/entry", rainbow.AddRainbowTableEntry)
 	// 删除彩虹表条目
 	adminRoutes.Delete("/rainbow/entry/:id", rainbow.DeleteRainbowTableEntry)
+	// 任务管理
+	adminRoutes.Get("/task/management", rainbow.TaskManagement)
+	// 取消任务
+	adminRoutes.Post("/task/cancel/:id", rainbow.CancelTask)
 
 	// 配置用户相关路由（需要JWT认证）
 	userRoutes := api.Group("/user")

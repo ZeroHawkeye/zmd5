@@ -143,4 +143,26 @@ export interface HistoryResponse {
   page: number
   pageSize: number
   records: HistoryRecord[]
+}
+
+export interface Task {
+  id: number;
+  user_id: number;
+  hash: string;
+  plain_text: string;
+  type: number;
+  status: number;
+  decrypt_status: number;
+  progress: number;
+  created_at: string;
+  updated_at: string;
+  tables_searched: number;
+  total_tables: number;
+  chains_searched: number;
+  reduction_attempts: number;
+}
+
+export interface TaskManagementResponse {
+  total: number;
+  tasks: Task[];
 } 
